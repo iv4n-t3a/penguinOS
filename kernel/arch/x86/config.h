@@ -11,7 +11,7 @@
 static const int k_ps2_keyboard_port = 0x60;
 static const int k_vga_cursor_port = 0x3D4;
 
-static const uint16_t k_pic_mask = 0b1111'1001;
+static const uint16_t k_pic_mask = 0b11111001;
 
 static const int k_terminal_height = 25;
 static const int k_terminal_width = 80;

@@ -22,13 +22,6 @@ error_t detect_memory_E820(boot_params_t *params) {
     params->x86_boot_params.memory_regions[i].type = entry.type;
     params->x86_boot_params.memory_regions[i].ACPI = entry.ACPI;
 
-    if (entry.type == E820_RAM_TYPE_USABLE) {
-      int j = params->free_memory_regions_count;
-      params->free_memory_regions[j].base = entry.base;
-      params->free_memory_regions[j].length = entry.length;
-      params->free_memory_regions_count += 1;
-    }
-
     if (call_id == 0) {
       params->x86_boot_params.memory_regions_count = i;
       return NEW_ERR(ERR_SUCCESS);

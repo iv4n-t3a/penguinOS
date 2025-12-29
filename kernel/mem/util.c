@@ -62,3 +62,11 @@ size_t pages_count(void *begin, void *end) {
   end = align_addr_to_page_size_down(end);
   return (end - begin) / PAGE_SIZE;
 }
+
+size_t dist(void *ptr1, void *ptr2) {
+  if (ptr1 > ptr2) {
+    return (uint8_t *)ptr1 - (uint8_t *)ptr2;
+  } else {
+    return (uint8_t *)ptr2 - (uint8_t *)ptr1;
+  }
+}

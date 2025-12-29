@@ -3,6 +3,7 @@
 #include "kernel/libs/kernel_log.h"
 #include "kernel/log_boot_params.h"
 #include "kernel/shell/shell.h"
+#include "kernel/mem/kmalloc.h"
 
 // kernel/arch/.../init.c
 void arch_init(boot_params_t);
@@ -18,6 +19,8 @@ void kmain(boot_params_t params) {
   LOG_INFO("Initializing shell...\n");
   kernel_shell_init();
   LOG_INFO("Shell initialized\n");
+
+  void *k = kmalloc(10);
 
   for (;;) {
   }

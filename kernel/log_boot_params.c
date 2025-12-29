@@ -38,16 +38,8 @@ void log_boot_params_x86(x86_boot_params_t params) {
 void log_boot_params(boot_params_t params) {
   LOG_INFO("boot_params.boot_drive = %x\n", params.boot_drive);
   LOG_INFO_APPEND("boot_params.stack_begin = %x\n", params.stack_begin);
-
-  LOG_INFO_APPEND("boot_params.free_memory_regions_count = %d\n",
-                  params.free_memory_regions_count);
-  LOG_INFO_APPEND("boot_params.free_memory_regions = [\n");
-  for (size_t i = 0; i < params.free_memory_regions_count; ++i) {
-    mementry_t *region = params.free_memory_regions + i;
-    LOG_INFO_APPEND("  Memory region: base=%x, length=%x\n",
-                    (uint32_t)region->base, (uint32_t)region->length);
-  }
-  LOG_INFO_APPEND("]\n");
+  LOG_INFO_APPEND("boot_params.kernel_begin = %x\n", params.kernel_begin);
+  LOG_INFO_APPEND("boot_params.kernel_size = %x\n", params.kernel_size);
 
 #if ARCH_x86
   log_boot_params_x86(params.x86_boot_params);

@@ -5,9 +5,9 @@
 #include "kernel/arch/x86/gdt.h"
 #include "kernel/arch/x86/idt.h"
 #include "kernel/arch/x86/isr.h"
+#include "kernel/arch/x86/kmalloc_init.h"
 #include "kernel/arch/x86/pic.h"
 #include "kernel/libs/kernel_log.h"
-#include "kernel/mem/buddy.h"
 
 void arch_init(boot_params_t params) {
   terminal_initialize(k_terminal_width, k_terminal_height);
@@ -29,4 +29,8 @@ void arch_init(boot_params_t params) {
   LOG_INFO("Initializing drivers...\n");
   init_drivers(params);
   LOG_INFO("Drivers initialized.\n");
+
+  LOG_INFO("Initializing allocator...\n");
+  kmalloc_init_x86(params);
+  LOG_INFO("Allocator initialized.\n");
 }

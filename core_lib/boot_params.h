@@ -22,11 +22,6 @@ typedef struct {
 } x86_mementry_t;
 
 typedef struct {
-  uint64_t base;
-  uint64_t length;
-} mementry_t;
-
-typedef struct {
   x86_mementry_t memory_regions[MEMORY_REGIONS_BUFFER_SIZE];
   size_t memory_regions_count;
 } x86_boot_params_t;
@@ -35,8 +30,8 @@ typedef struct {
   int boot_drive;
   void *stack_begin;
 
-  mementry_t free_memory_regions[MEMORY_REGIONS_BUFFER_SIZE];
-  size_t free_memory_regions_count;
+  void *kernel_begin;
+  size_t kernel_size;
 
   x86_boot_params_t x86_boot_params;
 } boot_params_t;

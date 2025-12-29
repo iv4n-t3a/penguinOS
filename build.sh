@@ -13,7 +13,7 @@ run_tests() {
 }
 
 run_qemu() {
-    qemu-system-i386 -debugcon stdio -drive file=$BOOTABLE,format=raw
+    qemu-system-i386 -debugcon stdio -m 4G -drive file=$BOOTABLE,format=raw
 }
 
 run_bochs_debugger() {

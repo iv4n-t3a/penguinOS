@@ -2,14 +2,14 @@
 #include "kernel/config.h"
 #include "kernel/mem/buddy.h"
 
-size_t slab_cache_pages(size_t objsize) {
+static size_t slab_cache_pages(size_t objsize) {
   if (objsize * SLAB_MIN_CACHE_OBJECTS < SLAB_MIN_CACHE_PAGES) {
     return SLAB_MIN_CACHE_PAGES;
   }
   return SLAB_MIN_CACHE_OBJECTS * sizeof(objsize);
 }
 
-void slab_cache_move_down(slab_alloc_t *alloc, slab_cache_header_t *cache) {
+static void slab_cache_move_down(slab_alloc_t *alloc, slab_cache_header_t *cache) {
   if (cache->next_cache == NULL) {
     return;
   }
@@ -25,7 +25,7 @@ void slab_cache_move_down(slab_alloc_t *alloc, slab_cache_header_t *cache) {
   }
 }
 
-void slab_cache_move_up(slab_alloc_t *alloc, slab_cache_header_t *cache) {
+static void slab_cache_move_up(slab_alloc_t *alloc, slab_cache_header_t *cache) {
   if (cache->prev_cache == NULL) {
     return;
   }
@@ -41,7 +41,7 @@ void slab_cache_move_up(slab_alloc_t *alloc, slab_cache_header_t *cache) {
   }
 }
 
-void slab_cache_init(slab_alloc_t *alloc, void *begin, void *end) {
+static void slab_cache_init(slab_alloc_t *alloc, void *begin, void *end) {
   slab_cache_header_t *cache = begin;
 
   cache->size = (uint8_t *)end - (uint8_t *)begin - sizeof(slab_cache_header_t);
@@ -70,7 +70,7 @@ void slab_cache_init(slab_alloc_t *alloc, void *begin, void *end) {
   }
 }
 
-void *slab_cache_alloc(slab_alloc_t *alloc, slab_cache_header_t *cache) {
+static void *slab_cache_alloc(slab_alloc_t *alloc, slab_cache_header_t *cache) {
   if (cache->allocated_objects == cache->max_objects) {
     return NULL;
   }
@@ -101,7 +101,7 @@ void *slab_cache_alloc(slab_alloc_t *alloc, slab_cache_header_t *cache) {
   return (uint8_t *)ptr + sizeof(slab_allocated_object_header_t);
 }
 
-void slab_cache_free(slab_alloc_t *alloc, slab_cache_header_t *cache,
+static void slab_cache_free(slab_alloc_t *alloc, slab_cache_header_t *cache,
                      void *ptr) {
   freelist_push(&cache->freelist, ptr);
   cache->allocated_objects -= 1;
@@ -112,7 +112,7 @@ void slab_cache_free(slab_alloc_t *alloc, slab_cache_header_t *cache,
   }
 }
 
-void slab_cache_destroy(slab_alloc_t *alloc, slab_cache_header_t *cache) {
+static void slab_cache_destroy(slab_alloc_t *alloc, slab_cache_header_t *cache) {
   if (cache->prev_cache == NULL) {
     alloc->first_cache = cache->next_cache;
   }

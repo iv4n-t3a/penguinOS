@@ -11,6 +11,7 @@ set(HEADERS
     mem/buddy.h
     mem/buddy_util.h
     mem/freelist.h
+    mem/kmalloc.h
     mem/slab.h
     mem/util.h
     log_boot_params.h
@@ -23,6 +24,7 @@ set(HEADERS_X86
     arch/x86/idt.h
     arch/x86/io.h
     arch/x86/isr.h
+    arch/x86/kmalloc_init.h
     arch/x86/pic.h)
 
 set(HEADERS_DEBUG arch/debug/keyboard.h)
@@ -37,6 +39,7 @@ set(SOURCES
     mem/buddy.c
     mem/buddy_util.c
     mem/freelist.c
+    mem/kmalloc.c
     mem/slab.c
     mem/util.c
     main.c
@@ -47,6 +50,7 @@ set(SOURCES_X86
     arch/x86/idt.c
     arch/x86/init.c
     arch/x86/isr.c
+    arch/x86/kmalloc_init.c
     arch/x86/pic.c
     arch/x86/ps2_keyboard.c
     arch/x86/vga.c)

@@ -15,7 +15,7 @@
 #include "core_lib/vga.h"
 
 void CDECL bootmain(int boot_drive) {
-  boot_params_t params = { 0 };
+  boot_params_t params = {0};
 
   params.boot_drive = boot_drive;
   params.stack_begin = (void *)0x8000;
@@ -31,8 +31,12 @@ void CDECL bootmain(int boot_drive) {
   ERR_HANDLE_MAIN(FAT_init(boot_drive, pt->entries + partition));
 
   void (*main)(boot_params_t);
+  size_t ksize = 0;
 
-  ERR_HANDLE_MAIN(read_elf("KERNEL  ELF", (void *)&main));
+  ERR_HANDLE_MAIN(read_elf("KERNEL  ELF", (void *)&main, &ksize));
+
+  params.kernel_begin = main;
+  params.kernel_size = ksize;
 
   main(params);
 
