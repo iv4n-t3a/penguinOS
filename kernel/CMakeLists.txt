@@ -12,6 +12,7 @@ set(HEADERS
     mem/buddy_util.h
     mem/freelist.h
     mem/kmalloc.h
+    mem/pfalloc.h
     mem/slab.h
     mem/util.h
     log_boot_params.h
@@ -40,6 +41,7 @@ set(SOURCES
     mem/buddy_util.c
     mem/freelist.c
     mem/kmalloc.c
+    mem/pfalloc.c
     mem/slab.c
     mem/util.c
     main.c

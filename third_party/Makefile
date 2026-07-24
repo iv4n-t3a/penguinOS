@@ -26,6 +26,10 @@ mpc: .mpc-${MPC_VERSION}-build-succeed
 .PHONY: mpc
 
 
+clean:
+	find . -mindepth 1 -maxdepth 1 ! -name Makefile -exec rm -rf {} +
+.PHONY: clean
+
 clean-all: clean-archieves clean-sources clean-binaries
 .PHONY: clean-all
 
@@ -43,6 +47,7 @@ clean-binaries:
 
 
 .gcc-${GCC_VERSION}-build-succeed: \
+		.gmp-${GMP_VERSION}-build-succeed           \
 		.mpc-${MPC_VERSION}-build-succeed           \
 		.mpfr-${MPFR_VERSION}-build-succeed         \
 		.binutils-${BINUTILS_VERSION}-build-succeed \
@@ -52,6 +57,9 @@ clean-binaries:
 	cd gcc-${GCC_VERSION}-build; \
 	../gcc-${GCC_VERSION}/configure \
 		--prefix="${TOOLCHAIN_PREFIX}"         \
+		--with-gmp="${TOOLCHAIN_PREFIX}"       \
+		--with-mpfr="${TOOLCHAIN_PREFIX}"      \
+		--with-mpc="${TOOLCHAIN_PREFIX}"      \
 		--target=${TARGET}                     \
 		--disable-nls                          \
 		--enable-languages=c,c++               \
@@ -59,10 +67,10 @@ clean-binaries:
 		--disable-hosted-libstdcxx
 	make -C gcc-${GCC_VERSION}-build -j${BUILD_TOOLS_JOBS} all-gcc
 	make -C gcc-${GCC_VERSION}-build -j${BUILD_TOOLS_JOBS} all-target-libgcc
-	make -C gcc-${GCC_VERSION}-build -j${BUILD_TOOLS_JOBS} all-target-libstdc++-v3
+	make -C gcc-${GCC_VERSION}-build -j${BUILD_TOOLS_LINK_JOBS} all-target-libstdc++-v3
 	make -C gcc-${GCC_VERSION}-build -j${BUILD_TOOLS_JOBS} install-gcc
 	make -C gcc-${GCC_VERSION}-build -j${BUILD_TOOLS_JOBS} install-target-libgcc
-	make -C gcc-${GCC_VERSION}-build -j${BUILD_TOOLS_JOBS} install-target-libstdc++-v3
+	make -C gcc-${GCC_VERSION}-build -j${BUILD_TOOLS_LINK_JOBS} install-target-libstdc++-v3
 	touch .gcc-${GCC_VERSION}-build-succeed
 
 gcc-${GCC_VERSION}: gcc-${GCC_VERSION}.tar.xz
@@ -98,30 +106,28 @@ binutils-${BINUTILS_VERSION}.tar.xz:
 	mkdir -p mpc-${MPC_VERSION}-build
 	cd mpc-${MPC_VERSION}-build; \
 	../mpc-${MPC_VERSION}/configure \
-		--prefix="${TOOLCHAIN_PREFIX}"
+		--prefix="${TOOLCHAIN_PREFIX}" \
+		--with-gmp="${TOOLCHAIN_PREFIX}"  \
+		--with-mpfr="${TOOLCHAIN_PREFIX}" \
+		--disable-shared
 	make -C mpc-${MPC_VERSION}-build
 	make -C mpc-${MPC_VERSION}-build install
 	touch .mpc-${MPC_VERSION}-build-succeed
 
-mpc-${MPC_VERSION}: mpc-${MPC_VERSION}.tar
-	tar -xf $<
+mpc-${MPC_VERSION}: mpc-${MPC_VERSION}.tar.xz
+	tar -xvf $<
 
-mpc-${MPC_VERSION}.tar: mpc-${MPC_VERSION}.tar.gz
-	gzip -d $<
-
-mpc-${MPC_VERSION}.tar.gz:
-	wget https://ftp.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.gz
+mpc-${MPC_VERSION}.tar.xz:
+	wget https://ftp.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.xz
 
 
-# TODO: Figure out why long long reliablity test fails in configure
-# and add to gcc build
 .gmp-${GMP_VERSION}-build-succeed: | gmp-${GMP_VERSION}
 	mkdir -p gmp-${GMP_VERSION}-build
 	cd gmp-${GMP_VERSION}-build; \
-	../gmp-${GMP_VERSION}/configure \
-		--build=${TARGET}              \
+	CFLAGS="-O2 -m64 -std=gnu17" ../gmp-${GMP_VERSION}/configure \
 		--prefix="${TOOLCHAIN_PREFIX}" \
-		--disable-assembly
+		--disable-assembly \
+		--disable-shared
 	make -C gmp-${GMP_VERSION}-build -j ${BUILD_TOOLS_JOBS}
 	make -C gmp-${GMP_VERSION}-build -j ${BUILD_TOOLS_JOBS} install
 	touch .gmp-${GMP_VERSION}-build-succeed
@@ -138,7 +144,8 @@ gmp-${GMP_VERSION}.tar.xz:
 	cd mpfr-${MPFR_VERSION}-build; \
 	../mpfr-${MPFR_VERSION}/configure      \
 		--prefix="${TOOLCHAIN_PREFIX}" \
-		--target=${TARGET}
+		--with-gmp="${TOOLCHAIN_PREFIX}" \
+		--disable-shared
 	make -C mpfr-${MPFR_VERSION}-build -j ${BUILD_TOOLS_JOBS}
 	make -C mpfr-${MPFR_VERSION}-build -j ${BUILD_TOOLS_JOBS} install
 	touch .mpfr-${MPFR_VERSION}-build-succeed

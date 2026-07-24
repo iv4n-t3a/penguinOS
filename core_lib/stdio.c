@@ -16,13 +16,13 @@ typedef enum {
   STATE_SPECIFIER,
 } state_t;
 
-void print_int(void (*pchar)(char), int num) {
+static void print_int(void (*pchar)(char), int num) {
   char str[11];
-  itos(num, str);
+  pos_itos(num, str);
   generic_putstr(pchar, str);
 }
 
-void print_hex(void (*pchar)(char), int num) {
+static void print_hex(void (*pchar)(char), int num) {
   pchar('0');
   pchar('x');
 
@@ -45,7 +45,7 @@ void print_hex(void (*pchar)(char), int num) {
   }
 }
 
-void process_char_normal(state_t *state, void (*pchar)(char), char c,
+static void process_char_normal(state_t *state, void (*pchar)(char), char c,
                          va_list *args) {
   switch (c) {
   case '%':
@@ -57,7 +57,7 @@ void process_char_normal(state_t *state, void (*pchar)(char), char c,
   }
 }
 
-void process_char_specifier(state_t *state, void (*pchar)(char), char c,
+static void process_char_specifier(state_t *state, void (*pchar)(char), char c,
                             va_list *args) {
   // TODO: Segfault on arch debug
   switch (c) {
@@ -87,7 +87,7 @@ void process_char_specifier(state_t *state, void (*pchar)(char), char c,
   *state = STATE_NORMAL;
 }
 
-void process_char(state_t *state, void (*pchar)(char), char c, va_list *args) {
+static void process_char(state_t *state, void (*pchar)(char), char c, va_list *args) {
   switch (*state) {
   case STATE_NORMAL:
     process_char_normal(state, pchar, c, args);

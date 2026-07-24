@@ -33,7 +33,7 @@ error_t FAT_init(int drive, MBR_partition_entry_t *entry) {
     return NEW_ERR(ERR_INCOMPATIBLE_BUFFER_SIZE);
   }
 
-  memset(root_dir, 0, sizeof(root_dir));
+  pos_memset(root_dir, 0, sizeof(root_dir));
   return read_disk(current_drive, root_dir, fat16_root_dir_lba(bpb),
                    fat16_root_dir_sectors(bpb));
 }
@@ -71,14 +71,14 @@ error_t FAT_load_cluster(FAT_cluster_t cluster, void *buffer) {
 }
 
 error_t FAT_open(FAT_file_t *file, char *name) {
-  if (strlen(name) != FAT16_FILENAME_LEN) {
+  if (pos_strlen(name) != FAT16_FILENAME_LEN) {
     return ERR_INVALID_FILE_NAME;
   }
 
   FAT16_direntry_t *dirent = nullptr;
 
   for (size_t i = 0; i < bpb->root_dir_entries; ++i) {
-    if (strcmp(root_dir[i].filename, name, FAT16_FILENAME_LEN)) {
+    if (pos_strcmp(root_dir[i].filename, name, FAT16_FILENAME_LEN)) {
       dirent = &root_dir[i];
     }
   }
@@ -114,7 +114,7 @@ error_t FAT_read(FAT_file_t *file, uint8_t *buffer, size_t bytes_to_read) {
     ERR_HANDLE_SUBROUTINE(FAT_load_cluster(file->cluster, transfer_buffer));
     int bytes_read =
         MIN(fat16_bytes_per_cluster(bpb) - file->pos_in_cluster, bytes_to_read);
-    memcpy(buffer, transfer_buffer + file->pos_in_cluster, bytes_read);
+    pos_memcpy(buffer, transfer_buffer + file->pos_in_cluster, bytes_read);
     file->bytes_left -= bytes_read;
     bytes_to_read -= bytes_read;
     buffer += bytes_read;
@@ -141,7 +141,7 @@ error_t FAT_read(FAT_file_t *file, uint8_t *buffer, size_t bytes_to_read) {
 
   if (bytes_to_read) {
     ERR_HANDLE_SUBROUTINE(FAT_load_cluster(file->cluster, transfer_buffer));
-    memcpy(buffer, transfer_buffer, bytes_to_read);
+    pos_memcpy(buffer, transfer_buffer, bytes_to_read);
     file->bytes_left -= bytes_to_read;
     file->pos_in_cluster += bytes_to_read;
     file->pos += bytes_to_read;

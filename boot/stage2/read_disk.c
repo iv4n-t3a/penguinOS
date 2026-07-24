@@ -27,7 +27,7 @@ error_t load_sector(int drive, uint64_t lba) {
 error_t read_disk(int drive, void *dst, uint64_t lba, uint16_t sectors) {
   for (size_t i = 0; i < sectors; ++i) {
     ERR_HANDLE_SUBROUTINE(load_sector(drive, lba + i));
-    memcpy(dst, buffer, READ_DISK_MEDIATOR_BUFFER_SIZE);
+    pos_memcpy(dst, buffer, READ_DISK_MEDIATOR_BUFFER_SIZE);
     dst += READ_DISK_MEDIATOR_BUFFER_SIZE;
   }
 

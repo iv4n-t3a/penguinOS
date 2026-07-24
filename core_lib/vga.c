@@ -116,11 +116,11 @@ void terminal_write(const char *data, size_t size) {
 }
 
 void terminal_writestring(const char *data) {
-  terminal_write(data, strlen(data));
+  terminal_write(data, pos_strlen(data));
 }
 
 void terminal_writeint(uint32_t num) {
   char str[11];
-  itos(num, str);
+  pos_itos(num, str);
   terminal_writestring(str);
 }

@@ -45,9 +45,9 @@ void strip_command_buffer() {
 void kernel_shell_run_command() {
   strip_command_buffer();
 
-  if (strcmp(command_buffer, "help", KERNEL_SHELL_BUFFER_SIZE)) {
+  if (pos_strcmp(command_buffer, "help", KERNEL_SHELL_BUFFER_SIZE)) {
     kprintf("Nothing can help you\n");
-  } else if (strcmp(command_buffer, "neofetch", KERNEL_SHELL_BUFFER_SIZE)) {
+  } else if (pos_strcmp(command_buffer, "neofetch", KERNEL_SHELL_BUFFER_SIZE)) {
     kprintf("                  ==++==+\n"
             "               =+**%%@%%+*=+@#+\n"
             "               ***@-%%.:@@-@=\n"
