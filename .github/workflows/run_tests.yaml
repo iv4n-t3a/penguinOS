@@ -1,0 +1,26 @@
+name: run tests
+
+on:
+  push:
+    branches: []
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup cmake
+      uses: step-security/actions-setup-cmake@v2
+      with:
+        # Minimum supported cmake version
+        cmake-version: '3.28.x'
+
+    - name: Build and run tests
+      run:
+        ./build.sh tests
