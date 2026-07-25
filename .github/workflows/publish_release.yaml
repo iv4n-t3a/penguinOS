@@ -22,6 +22,11 @@ jobs:
         # Minimum supported cmake version
         cmake-version: '3.28.x'
 
+    - name: Install mtools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y mtools
+
     - name: Setup build tools
       run:
         ./build.sh tools
