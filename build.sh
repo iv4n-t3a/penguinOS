@@ -3,12 +3,14 @@
 mkimage() {
   cmake -S . -B $BUILDDIR -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN -DARCH:STRING=$ARCH -DTARGET:STRING=BOOTABLE
   make -C $BUILDDIR
+  ln -sf build_x86/compile_commands.json compile_commands.json
   BUILDDIR=$BUILDDIR ARCH=$ARCH ./mkimage/mkimage_${ARCH}.sh
 }
 
 run_tests() {
     cmake -S . -B $BUILDDIR -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN -DTARGET:STRING=TESTS -DARCH:STRING=$ARCH
     make -C $BUILDDIR
+    ln -sf build_tests/compile_commands.json tests/compile_commands.json
     ./$BUILDDIR/tests/unit_tests --gtest_color=yes
 }
 
