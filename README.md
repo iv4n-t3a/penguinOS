@@ -1,40 +1,67 @@
 # Penguin OS
 
-Учебная операционная система. На данный момент ведется разработка :(
+**This project isn't complete OS at the moment, but it can boot and `neofetch`**
+
+## Features
+
+- two-stage legacy BIOS boot
+- fat16 filesystem support
+- buddy, slab memory allocator
+- ps/2 keyboard driver
+- vga display driver
 
 ![demo](assets/demo.jpg)
 
-## Уже сделано
+## Download release and run
 
-- Двух этапная загрузка legacy-BIOS
-- Обработка прерываний
-- gdt
-- memory detection
-- keyboard driver
-- e9 logging
-- vga driver
-- kernel shell framework
+Go to releases page and download `bootable.dd` for the latest release. Run with QEMU:
 
-## Процесс загрузки
+    qemu-system-i386 -debugcon stdio -m 256M -drive file=bootable.dd,format=raw
 
-- mbr ищет первый активный boot раздел, копируется на другой адресс и запускает vbr
-- vbr читает bin файл загрузкичка второго уровня
-- загрузчик второго уровня загружает gdt, активирует a20 и переходит в 32-protected mode
-- загрузчик второго уровня получает всю параметры загрузки от BIOS и своих настроек (memory detection, boot drive, device detection e.t.c)
-- загрузчик второго уровня парсит elf файл ядра и загружет его в соответсвии с заголовками
-- ядро инициализирует interrupt descriptor table и переопределяет global descriptor table
+Or even write to real usb-drive for running on real hardware
 
-## В разработке
+**WARNING**: PenguinOS is a hobby project, the author has no responsibility for what happens to your device after running PenguinOS.
 
-- boddy page-frame allocator
-- pagging
-- virtual file system
-- syscalls
-- SLUB/SLOB/Slab allocator
+    sudo dd if=bootable.dd of=/dev/sdX # Put your drive device path
 
-## В планах
+Then stick the drive and find the boot option in boot-menu. This probably won't work on modern devices, unless your turn bios-compatibility options. But the proper way is to find old 32-bit laptop.
 
-- Нормальный user-space
-- user-space shell
-- gui
-- uefi bootloader
+## Build
+
+### Install deps
+
+#### deps
+
+- gcc
+- mtools
+- cmake
+- m4 (shipped with gcc on most distros, but might not)
+- libasan (for tests only)
+
+#### install on fedora
+
+    sudo dnf install -y gcc mtools cmake m4 libasan
+    sudo dnf install -y qemu qemu-kvm qemu-system-i386 # qemu for running on vm
+
+#### install on ubuntu
+
+    sudo apt install -y gcc mtools cmake m4 libasan8
+    sudo apt install -y qemu-kvm qemu-system-i386 # qemu for running on vm
+
+### Build cross-compiler (this may take a time)
+
+    ./build.sh tools
+
+### Build bootable image
+
+    ./build.sh mkimage
+
+bootable will lie in build_x86/bootable.dd
+
+### Run PenguinOS on QEMU
+
+    ./build.sh qemu
+
+### Run tests
+
+    ./build.sh tests
