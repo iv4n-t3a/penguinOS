@@ -1,0 +1,40 @@
+name: Test and release APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  test-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v4
+
+    - name: Setup cmake
+      uses: step-security/actions-setup-cmake@v2
+      with:
+        # Minimum supported cmake version
+        cmake-version: '3.28.x'
+
+    - name: Setup build tools
+      run:
+        ./build.sh tools
+
+    - name: Build bootable x86 image
+      run:
+        ./build.sh mkimage
+
+    - name: Upload APK to Release
+      uses: softprops/action-gh-release@v2
+      if: github.ref_type == 'tag'
+      with:
+        files: build_x86/bootable.dd
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
