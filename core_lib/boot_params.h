@@ -34,6 +34,8 @@ typedef struct {
   size_t kernel_size;
 
   x86_boot_params_t x86_boot_params;
+
+  size_t memory_total;
 } boot_params_t;
 
 #endif // #ifndef CORE_LIB_BOOT_PARAMS_H

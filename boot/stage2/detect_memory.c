@@ -7,6 +7,7 @@
 
 error_t detect_memory_E820(boot_params_t *params) {
   int call_id = 0;
+  params->memory_total = 0;
   E820_mementry_t entry;
 
   for (size_t i = params->x86_boot_params.memory_regions_count;
@@ -21,6 +22,7 @@ error_t detect_memory_E820(boot_params_t *params) {
     params->x86_boot_params.memory_regions[i].length = entry.length;
     params->x86_boot_params.memory_regions[i].type = entry.type;
     params->x86_boot_params.memory_regions[i].ACPI = entry.ACPI;
+    params->memory_total += entry.length;
 
     if (call_id == 0) {
       params->x86_boot_params.memory_regions_count = i;

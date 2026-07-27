@@ -40,6 +40,7 @@ void log_boot_params(boot_params_t params) {
   LOG_INFO_APPEND("boot_params.stack_begin = %x\n", params.stack_begin);
   LOG_INFO_APPEND("boot_params.kernel_begin = %x\n", params.kernel_begin);
   LOG_INFO_APPEND("boot_params.kernel_size = %x\n", params.kernel_size);
+  LOG_INFO_APPEND("boot_params.memotry_total = %x\n", params.memory_total);
 
 #if ARCH_x86
   log_boot_params_x86(params.x86_boot_params);

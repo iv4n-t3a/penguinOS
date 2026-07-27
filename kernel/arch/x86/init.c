@@ -1,4 +1,5 @@
 #include "kernel/drivers/init.h"
+
 #include "core_lib/boot_params.h"
 #include "core_lib/vga.h"
 #include "kernel/arch/x86/config.h"
@@ -6,12 +7,16 @@
 #include "kernel/arch/x86/idt.h"
 #include "kernel/arch/x86/isr.h"
 #include "kernel/arch/x86/kmalloc_init.h"
+#include "kernel/arch/x86/paging.h"
 #include "kernel/arch/x86/pic.h"
 #include "kernel/libs/kernel_log.h"
+#include "kernel/log_boot_params.h"
 
 void arch_init(boot_params_t params) {
   terminal_initialize(k_terminal_width, k_terminal_height);
   LOG_INFO("Terminal initialized.\n");
+
+  log_boot_params(params);
 
   LOG_INFO("Loaded GDT...\n");
   GDT_load();
@@ -33,4 +38,8 @@ void arch_init(boot_params_t params) {
   LOG_INFO("Initializing allocator...\n");
   kmalloc_init_x86(params);
   LOG_INFO("Allocator initialized.\n");
+
+  LOG_INFO("Initializing identity paging...\n");
+  init_identity_paging(params);
+  LOG_INFO("Identity paging initialized.\n");
 }
