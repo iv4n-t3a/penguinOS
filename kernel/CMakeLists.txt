@@ -4,6 +4,7 @@ set(HEADERS
     drivers/init.h
     drivers/keyboard.h
     drivers/keyboard_hook.h
+    drivers/pci.h
     drivers/ps2_keyboard.h
     libs/kernel_log.h
     libs/kernel_panic.h
@@ -34,6 +35,7 @@ set(HEADERS_DEBUG arch/debug/keyboard.h)
 set(SOURCES
     drivers/init.c
     drivers/keyboard_hook.c
+    drivers/pci.c
     drivers/ps2_keyboard.c
     libs/kernel_log.c
     libs/stdio.c
@@ -55,6 +57,7 @@ set(SOURCES_X86
     arch/x86/isr.c
     arch/x86/kmalloc_init.c
     arch/x86/paging.c
+    arch/x86/pci.c
     arch/x86/pic.c
     arch/x86/ps2_keyboard.c
     arch/x86/vga.c)

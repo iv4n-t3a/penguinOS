@@ -31,10 +31,6 @@ void arch_init(boot_params_t params) {
   IDT_load(idt_handlers, sizeof(idt_handlers) / sizeof(idtentry_t));
   LOG_INFO("IDT loaded.\n");
 
-  LOG_INFO("Initializing drivers...\n");
-  init_drivers(params);
-  LOG_INFO("Drivers initialized.\n");
-
   LOG_INFO("Initializing allocator...\n");
   kmalloc_init_x86(params);
   LOG_INFO("Allocator initialized.\n");

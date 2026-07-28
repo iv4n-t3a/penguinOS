@@ -10,6 +10,8 @@
 
 static const int k_ps2_keyboard_port = 0x60;
 static const int k_vga_cursor_port = 0x3D4;
+static const int k_pci_config_address_port = 0xCF8;
+static const int k_pci_config_data_port = 0xCFC;
 
 static const uint16_t k_pic_mask = 0b11111001;
 
