@@ -8,7 +8,16 @@ size_t pos_strlen(const char *str) {
   return len;
 }
 
-void pos_itos(uint32_t num, char *str) {
+void pos_itos(int32_t num, char *str) {
+  if (num >= 0) {
+    pos_utos(num, str);
+  } else {
+    str[0] = '-';
+    pos_utos(-num, &str[1]);
+  }
+}
+
+void pos_utos(uint32_t num, char *str) {
   if (num == 0) {
     str[0] = '0';
     str[1] = '\0';

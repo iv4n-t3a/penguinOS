@@ -6,7 +6,8 @@
 #include <stdint.h>
 
 size_t pos_strlen(const char *str);
-void pos_itos(uint32_t num, char *str);
+void pos_itos(int32_t num, char *str);
+void pos_utos(uint32_t num, char *str);
 
 bool pos_strcmp(const char *str1, const char *str2, size_t size);
 void *pos_memcpy(char *dst, const char *src, size_t count);
