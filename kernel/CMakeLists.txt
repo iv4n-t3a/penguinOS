@@ -1,6 +1,8 @@
 set(HEADERS
     compiler.h
     config.h
+    drivers/pci/ide.h
+    drivers/pci/init.h
     drivers/init.h
     drivers/keyboard.h
     drivers/keyboard_hook.h
@@ -33,6 +35,8 @@ set(HEADERS_X86
 set(HEADERS_DEBUG arch/debug/keyboard.h)
 
 set(SOURCES
+    drivers/pci/ide.c
+    drivers/pci/init.c
     drivers/init.c
     drivers/keyboard_hook.c
     drivers/pci.c
